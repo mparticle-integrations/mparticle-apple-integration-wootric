@@ -1,7 +1,7 @@
 //
 //  MPKitWootric.m
 //
-//  Copyright 2015 mParticle, Inc.
+//  Copyright 2016 mParticle, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -16,15 +16,25 @@
 //  limitations under the License.
 //
 
-#if defined(MP_KIT_WOOTRIC)
-
 #import "MPKitWootric.h"
+#import "mParticle.h"
+#import "MPKitRegister.h"
 #import <WootricSDK/WootricSDK.h>
 
 @implementation MPKitWootric
 
-- (instancetype)initWithConfiguration:(NSDictionary *)configuration {
-    self = [super initWithConfiguration:configuration];
++ (NSNumber *)kitCode {
+    return @90;
+}
+
++ (void)load {
+    MPKitRegister *kitRegister = [[MPKitRegister alloc] initWithName:@"Wootric" className:@"MPKitWootric" startImmediately:YES];
+    [MParticle registerExtension:kitRegister];
+}
+
+- (instancetype)initWithConfiguration:(NSDictionary *)configuration startImmediately:(BOOL)startImmediately {
+    NSAssert(configuration != nil, @"Required parameter. It cannot be nil.");
+    self = [super init];
     if (!self) {
         return nil;
     }
@@ -40,14 +50,12 @@
 
     [Wootric configureWithClientID:clientId clientSecret:clientSecret accountToken:accountToken];
 
-    frameworkAvailable = YES;
-    started = YES;
-    self.forwardedEvents = YES;
-    self.active = YES;
+    _configuration = configuration;
+    _started = startImmediately;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSDictionary *userInfo = @{mParticleKitInstanceKey:@(MPKitInstanceWootric),
-                                   mParticleEmbeddedSDKInstanceKey:@(MPKitInstanceWootric)};
+        NSDictionary *userInfo = @{mParticleKitInstanceKey:[[self class] kitCode],
+                                   mParticleEmbeddedSDKInstanceKey:[[self class] kitCode]};
 
         [[NSNotificationCenter defaultCenter] postNotificationName:mParticleKitDidBecomeActiveNotification
                                                             object:nil
@@ -63,21 +71,21 @@
 
 - (MPKitExecStatus *)setUserIdentity:(NSString *)identityString identityType:(MPUserIdentity)identityType {
     MPKitReturnCode returnCode;
-    
+
     if (identityType == MPUserIdentityCustomerId || identityType == MPUserIdentityEmail) {
         [Wootric setEndUserEmail:identityString];
         returnCode = MPKitReturnCodeSuccess;
     } else {
         returnCode = MPKitReturnCodeUnavailable;
     }
-    
+
     MPKitExecStatus *execStatus = [[MPKitExecStatus alloc] initWithSDKCode:@(MPKitInstanceWootric) returnCode:returnCode];
     return execStatus;
 }
 
 - (MPKitExecStatus *)setUserAttribute:(NSString *)key value:(NSString *)value {
     MPKitReturnCode returnCode;
-    
+
     if (value != nil) {
         NSMutableDictionary *newProperties = [[Wootric endUserProperties] mutableCopy];
         newProperties[key] = value;
@@ -92,5 +100,3 @@
 }
 
 @end
-
-#endif
