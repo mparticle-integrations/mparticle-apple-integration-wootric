@@ -78,6 +78,9 @@
 
     if (value != nil) {
         NSMutableDictionary *newProperties = [[Wootric endUserProperties] mutableCopy];
+        if (!newProperties) {
+            newProperties = [NSMutableDictionary dictionary];
+        }
         newProperties[key] = value;
         [Wootric setEndUserProperties:newProperties];
         returnCode = MPKitReturnCodeSuccess;
