@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "mParticle-Wootric"
-    s.version          = "6.6.0"
+    s.version          = "6.7.0"
     s.summary          = "Wootric integration for mParticle"
 
     s.description      = <<-DESC
@@ -15,6 +15,6 @@ Pod::Spec.new do |s|
 
     s.ios.deployment_target = "7.0"
     s.ios.source_files      = 'mParticle-Wootric/*.{h,m,mm}'
-    s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.6'
+    s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 6.7'
     s.ios.dependency 'WootricSDK', '0.5.3'
 end
