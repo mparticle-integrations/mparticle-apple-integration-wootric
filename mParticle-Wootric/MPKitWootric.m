@@ -28,25 +28,27 @@
 }
 
 + (void)load {
-    MPKitRegister *kitRegister = [[MPKitRegister alloc] initWithName:@"Wootric" className:@"MPKitWootric" startImmediately:YES];
+    MPKitRegister *kitRegister = [[MPKitRegister alloc] initWithName:@"Wootric" className:@"MPKitWootric"];
     [MParticle registerExtension:kitRegister];
 }
 
-- (instancetype)initWithConfiguration:(NSDictionary *)configuration startImmediately:(BOOL)startImmediately {
-    self = [super init];
+- (MPKitExecStatus *)didFinishLaunchingWithConfiguration:(NSDictionary *)configuration {
+    MPKitExecStatus *execStatus = nil;
+
     NSString *accountToken = configuration[@"accountToken"];
     NSString *clientSecret = configuration[@"clientSecret"];
     NSString *clientId = configuration[@"clientId"];
     BOOL validConfiguration = accountToken != nil && clientSecret != nil && clientId != nil;
 
-    if (!self || !validConfiguration) {
-        return nil;
+    if (!validConfiguration) {
+        execStatus = [[MPKitExecStatus alloc] initWithSDKCode:[[self class] kitCode] returnCode:MPKitReturnCodeRequirementsNotMet];
+        return execStatus;
     }
 
     [Wootric configureWithClientID:clientId clientSecret:clientSecret accountToken:accountToken];
 
     _configuration = configuration;
-    _started = startImmediately;
+    _started = YES;
 
     dispatch_async(dispatch_get_main_queue(), ^{
         NSDictionary *userInfo = @{mParticleKitInstanceKey:[[self class] kitCode]};
@@ -56,7 +58,8 @@
                                                           userInfo:userInfo];
     });
 
-    return self;
+    execStatus = [[MPKitExecStatus alloc] initWithSDKCode:[[self class] kitCode] returnCode:MPKitReturnCodeSuccess];
+    return execStatus;
 }
 
 - (MPKitExecStatus *)setUserIdentity:(NSString *)identityString identityType:(MPUserIdentity)identityType {
