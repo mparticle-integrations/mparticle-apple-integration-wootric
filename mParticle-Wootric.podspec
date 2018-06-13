@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "mParticle-Wootric"
-    s.version          = "7.3.11"
+    s.version          = "7.3.12"
     s.summary          = "Wootric integration for mParticle"
 
     s.description      = <<-DESC
