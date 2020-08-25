@@ -27,7 +27,7 @@
         return execStatus;
     }
     
-    [Wootric configureWithClientID:clientId clientSecret:clientSecret accountToken:accountToken];
+    [Wootric configureWithClientID:clientId accountToken:accountToken];
     
     _configuration = configuration;
     _started = YES;
