@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
     s.ios.deployment_target = "9.0"
     s.ios.source_files      = 'mParticle-Wootric/*.{h,m,mm}'
     s.ios.dependency 'mParticle-Apple-SDK/mParticle', '~> 8.0-beta'
-    s.ios.dependency 'WootricSDK', '0.5.12'
+    s.ios.dependency 'WootricSDK', '0.18'
 end
