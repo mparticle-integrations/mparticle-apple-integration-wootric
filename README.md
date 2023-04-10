@@ -7,7 +7,7 @@ This repository contains the [Wootric](https://www.wootric.com) integration for 
 1. Add the kit dependency to your app's Podfile:
 
     ```
-    pod 'mParticle-Wootric', '~> 7.0'
+    pod 'mParticle-Wootric', '~> 8'
     ```
 
 2. Follow the mParticle iOS SDK [quick-start](https://github.com/mParticle/mparticle-apple-sdk), then rebuild and launch your app, and verify that you see `"Included kits: { Wootric }"` in your Xcode console 
